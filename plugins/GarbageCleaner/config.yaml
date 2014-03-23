@@ -1,0 +1,16 @@
+name: Garbage Cleaner
+id:   GarbageCleaner
+version: 0.1
+callbacks:
+    MT::FileInfo::post_remove: >
+        sub {
+                my ( $cb, $obj ) = @_;
+                my $path = $obj->file_path;
+                require MT::FileMgr;
+                my $fmgr = MT::FileMgr->new( 'Local' )
+                                or die MT::FileMgr->errstr;
+                if ( $fmgr->exists( $path ) ) {
+                    $fmgr->delete( $path ) or die MT::FileMgr->errstr;
+                }
+             };
+
